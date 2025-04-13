@@ -3,7 +3,12 @@
     "next/core-web-vitals",
     "next/typescript"
   ],
+  "plugins": [
+    "import",
+    "@typescript-eslint/eslint-plugin"
+  ],
   "rules": {
+    "@typescript-eslint/no-unused-vars": ["warn"],
     "semi": ["error", "always"],
     "quotes": ["error", "single"],
     "eqeqeq": ["error", "always"],
@@ -12,6 +17,17 @@
     "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
     "no-console": ["warn"],
-    "prefer-const": ["error"]
+    "prefer-const": ["error"],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          ["builtin", "external"],
+          ["internal"],
+          ["parent", "sibling", "index"]
+        ],
+        "newlines-between": "always"
+      }
+    ]
   }
 }

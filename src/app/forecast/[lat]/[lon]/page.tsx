@@ -1,8 +1,9 @@
 'use client';
 import React, { useCallback, useEffect } from 'react';
-import { useWeatherStore } from '@/store/weatherStore';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
+
+import { useWeatherStore } from '@/store/weatherStore';
 import Spinner from '@/components/Spinner/Spinner';
 import { fetchWeatherData } from '@/api/api';
 import WeatherCard from '@/components/WeatherCard';

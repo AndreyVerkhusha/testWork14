@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import axios from 'axios';
+
 import { useLocationStore } from '@/store/locationStore';
 import { fetchLocationData } from '@/api/api';
 

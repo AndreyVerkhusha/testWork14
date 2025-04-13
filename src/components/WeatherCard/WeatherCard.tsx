@@ -1,8 +1,12 @@
 import React, { memo, useMemo, useState } from 'react';
 import cn from 'classnames';
 import dayjs from 'dayjs';
-import { WeatherResponse } from '@/types/weather';
 import { FaStar, FaRegStar } from 'react-icons/fa';
+
+import { Location } from '@/types/location';
+import { WeatherResponse } from '@/types/weather';
+import useFavoriteStore from '@/store/favoriteStore';
+
 import styles from './WeatherCard.module.scss';
 
 const dateTimeFormat = 'DD.MM.YY HH:mm';
@@ -12,7 +16,8 @@ const WeatherCard = memo(
   ({ weatherData }: { weatherData: WeatherResponse }) => {
     const [selectedDay, setSelectedDay] = useState(0);
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [isFavorite, setIsFavorite] = useState(false);
+
+    const { favorites, addFavorite, removeFavorite } = useFavoriteStore();
 
     const today = dayjs();
     const tomorrow = today.add(1, 'day');
@@ -31,6 +36,10 @@ const WeatherCard = memo(
       });
     }, [weatherData.list, tomorrow]);
 
+    const isFavorite = favorites.some(
+      (fav: Location) => fav.name === weatherData.city.name,
+    );
+
     const handleIndexChange = (index: number) => {
       setSelectedIndex(index);
     };
@@ -41,7 +50,18 @@ const WeatherCard = memo(
     };
 
     const toggleFavorite = () => {
-      setIsFavorite(prev => !prev);
+      const location: Location = {
+        name: weatherData.city.name,
+        lat: weatherData.city.coord.lat,
+        lon: weatherData.city.coord.lon,
+        country: weatherData.city.country,
+      };
+
+      if (isFavorite) {
+        removeFavorite(location);
+      } else {
+        addFavorite(location);
+      }
     };
 
     const forecast = selectedDay === 0 ? todayForecast : tomorrowForecast;
@@ -49,9 +69,13 @@ const WeatherCard = memo(
     return (
       <div className={styles.card}>
         <div className={styles.cardHeader}>
-          <h5>
+          <h5 className="m-0">
             {weatherData.city.name}, {weatherData.city.country}
           </h5>
+          <span className="text-muted">
+            Гео координаты: [{weatherData.city.coord.lat},{' '}
+            {weatherData.city.coord.lon}]
+          </span>
           <button onClick={toggleFavorite} className={styles.favoriteButton}>
             {isFavorite ? <FaStar color="gold" /> : <FaRegStar />}
           </button>

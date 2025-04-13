@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+
 import { WeatherResponse } from '@/types/weather';
 
 type WeatherStore = {
